@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HALO — 당신만 몰랐을 뿐</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #E8E4DC;
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+    }
+
+    .halo-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 56px 32px 44px;
+      border-bottom: 1px solid #1A1610;
+    }
+
+    .halo-logo-wrap {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 28px;
+    }
+
+    .halo-logo-wrap svg { width: 160px; height: 160px; }
+
+    .halo-headline {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 24px;
+      font-weight: 400;
+      text-align: center;
+      line-height: 1.55;
+      max-width: 460px;
+      margin-bottom: 10px;
+    }
+
+    .halo-headline em { font-style: italic; color: #B8933A; }
+
+    .halo-sub {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: #4A4540;
+      text-align: center;
+    }
+
+    .halo-section {
+      padding: 44px 32px;
+      border-bottom: 1px solid #1A1610;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .sec-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #B8933A;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sec-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1A1610;
+    }
+
+    .q-main {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      color: #E8E4DC;
+    }
+
+    .vote-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .vote-btn {
+      padding: 15px;
+      border: 1px solid #252015;
+      background: #000;
+      color: #E8E4DC;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+    }
+
+    .vote-btn:hover { border-color: #B8933A; color: #B8933A; }
+    .vote-btn.selected { border-color: #B8933A; background: rgba(184,147,58,0.07); color: #B8933A; }
+
+    .q-sub { font-size: 11px; color: #5A5550; margin-bottom: 10px; }
+
+    textarea {
+      width: 100%;
+      background: #080808;
+      border: 1px solid #252015;
+      color: #E8E4DC;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 14px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+
+    textarea:focus { border-color: #B8933A; }
+    textarea::placeholder { color: #2A2520; }
+
+    input[type="text"] {
+      width: 100%;
+      background: #080808;
+      border: 1px solid #252015;
+      color: #E8E4DC;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.18s;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"]:focus { border-color: #B8933A; }
+    input[type="text"]::placeholder { color: #2A2520; }
+
+    .char-count { font-size: 10px; color: #2A2520; text-align: right; margin-top: 4px; margin-bottom: 16px; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      border: 1px solid #B8933A;
+      color: #B8933A;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover { background: rgba(184,147,58,0.09); }
+    .submit-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .success-msg {
+      text-align: center;
+      padding: 22px;
+      border: 1px solid #B8933A;
+      background: rgba(184,147,58,0.04);
+      margin-top: 14px;
+      display: none;
+    }
+
+    .success-msg p {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: #B8933A;
+      margin-bottom: 4px;
+    }
+
+    .success-msg span { font-size: 10px; color: #6B6780; letter-spacing: 0.12em; }
+
+    .resp-section { padding: 44px 32px; max-width: 620px; margin: 0 auto; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: #1A1610;
+      border: 1px solid #1A1610;
+      margin-bottom: 28px;
+    }
+
+    .stat-item { background: #000; padding: 18px; text-align: center; }
+    .stat-num { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 400; color: #B8933A; display: block; }
+    .stat-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: #3A3530; margin-top: 3px; display: block; }
+
+    .bar-section { margin-bottom: 24px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 7px; }
+    .bar-label { font-size: 10px; color: #6B6780; width: 36px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 3px; background: #1A1610; }
+    .bar-fill { height: 100%; background: #B8933A; transition: width 0.6s ease; }
+    .bar-fill-no { height: 100%; background: #3A3530; transition: width 0.6s ease; }
+    .bar-pct { font-size: 10px; color: #B8933A; width: 30px; text-align: right; }
+    .bar-pct-no { font-size: 10px; color: #3A3530; width: 30px; text-align: right; }
+
+    .filter-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+
+    .filter-btn {
+      padding: 5px 12px;
+      border: 1px solid #252015;
+      background: #000;
+      color: #5A5550;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn.active { border-color: #B8933A; color: #B8933A; }
+
+    .resp-card { border: 1px solid #1A1610; padding: 18px 22px; margin-bottom: 1px; background: #000; }
+    .resp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+    .resp-vote { font-size: 9px; letter-spacing: 0.12em; padding: 3px 9px; border: 1px solid; }
+    .resp-vote.yes { border-color: #B8933A; color: #B8933A; }
+    .resp-vote.no { border-color: #3A3530; color: #5A5550; }
+    .resp-time { font-size: 10px; color: #2A2520; }
+    .resp-text { font-size: 13px; line-height: 1.8; color: rgba(232,228,220,0.72); margin-bottom: 7px; }
+    .resp-name { font-size: 10px; color: #3A3530; }
+
+    .empty-state { text-align: center; padding: 44px 0; color: #2A2520; font-size: 11px; letter-spacing: 0.12em; }
+    .loading-state { text-align: center; padding: 44px 0; color: #3A3530; font-size: 11px; }
+
+    .halo-footer {
+      padding: 28px 32px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: #1A1610;
+      text-transform: uppercase;
+      border-top: 1px solid #1A1610;
+    }
+
+    @media (max-width: 480px) {
+      .halo-hero { padding: 40px 20px 32px; }
+      .halo-section, .resp-section { padding: 32px 20px; }
+      .halo-headline { font-size: 20px; }
+      .vote-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+    ⚠️ 여기에 Apps Script 웹 앱 URL을 넣으세요
+    예: https://script.google.com/macros/s/ABC.../exec
+  ======================================== -->
+  <script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyZdi6jGfwpnc22lp9kCOI73dmQZzDemri-Y1oP40wKpGhwW9Iu5PwWFXMpL5J5WqgI/exec';
+  </script>
+
+  <div class="halo-hero">
+    <!-- 원본 HALO SVG 로고 -->
+    <div class="halo-logo-wrap">
+      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 204.24 204.24">
+        <defs>
+          <style>
+            .cls-1 { fill: #231f20; }
+            .cls-2 { fill: url(#logo-grad); }
+            .cls-3 { fill: #fff; }
+            .cls-4 { fill: #bdab9d; }
+            .cls-5 { opacity: .3; }
+          </style>
+          <linearGradient id="logo-grad" x1="2034.39" y1="-1898.52" x2="2166.44" y2="-1898.52" gradientTransform="translate(-1796.4079 -1998.3359) rotate(90)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#968052"/>
+            <stop offset=".44" stop-color="#fff"/>
+            <stop offset=".76" stop-color="#af8437"/>
+            <stop offset="1" stop-color="#544a34"/>
+          </linearGradient>
+        </defs>
+        <g>
+          <g>
+            <circle class="cls-1" cx="102.11" cy="102.08" r="65.03"/>
+            <path class="cls-2" d="M102.12,168.11c-36.41,0-66.03-29.62-66.03-66.03s29.62-66.02,66.03-66.02,66.03,29.62,66.03,66.02-29.62,66.03-66.03,66.03ZM102.12,38.06c-35.3,0-64.03,28.72-64.03,64.02s28.72,64.03,64.03,64.03,64.03-28.72,64.03-64.03-28.72-64.02-64.03-64.02Z"/>
+          </g>
+        </g>
+        <g>
+          <g>
+            <path class="cls-3" d="M54.29,100.84h20.17v-7.32h.47v16.06h-.47v-8.34h-20.17v8.34h-.47v-16.06h.47v7.32Z"/>
+            <path class="cls-3" d="M94.53,93.68l9.12,15.91h-.51l-3.17-5.53h-17.04l-3.17,5.53h-.51l9.12-15.91c1.09-.11,1.99-.16,3.08-.16s1.99.04,3.08.16ZM88.69,94.04l-5.51,9.62h16.55l-5.49-9.62c-.98-.07-1.81-.11-2.79-.11s-1.81.04-2.77.11Z"/>
+            <path class="cls-3" d="M108.49,93.53v3.44c0,3.97.11,8.21.4,12.11,2.72.22,5.6.38,8.32.38s5.6-.16,8.3-.38c.27-1.05.36-2.01.42-3.06h.49c-.09,1.18-.22,2.25-.49,3.41-2.9.29-5.82.4-8.72.4s-5.82-.11-8.72-.4c-.31-4.06-.49-8.39-.49-12.47v-3.44h.49Z"/>
+          </g>
+          <path class="cls-4" d="M141.13,109.96c-7.07,0-12.82-3.77-12.82-8.4s5.75-8.4,12.82-8.4,12.82,3.77,12.82,8.4-5.75,8.4-12.82,8.4ZM141.13,93.91c-6.65,0-12.07,3.43-12.07,7.65s5.41,7.65,12.07,7.65,12.07-3.43,12.07-7.65-5.41-7.65-12.07-7.65Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <h1 class="halo-headline">
+      당신은 오늘 충분히 빛났습니다.<br>
+      <em>당신만 몰랐을 뿐.</em>
+    </h1>
+    <p class="halo-sub">26-1 Speculative Design Exhibition · 2026</p>
+  </div>
+
+  <div class="halo-section">
+    <div class="sec-label">당신의 생각을 남겨주세요</div>
+    <p class="q-main">이 세계관, 말이 된다고 생각하시나요?</p>
+    <div class="vote-row">
+      <button class="vote-btn" id="vote-yes" onclick="selectVote('yes')">YES — 충분히 가능하다</button>
+      <button class="vote-btn" id="vote-no" onclick="selectVote('no')">NO — 말이 안 된다</button>
+    </div>
+    <p class="q-sub">어떤 생각이 드셨나요?</p>
+    <textarea id="thought-input" rows="4"
+      placeholder="자유롭게 적어주세요 — 불편했던 점, 공감됐던 점, 떠오른 질문 무엇이든."
+      maxlength="400" oninput="updateChar(this)"></textarea>
+    <div class="char-count"><span id="char-num">0</span> / 400</div>
+    <p class="q-sub">이름 또는 익명 (선택)</p>
+    <input type="text" id="name-input" placeholder="익명으로 남기셔도 됩니다" maxlength="30"/>
+    <button class="submit-btn" id="submit-btn" onclick="submitResponse()">의견 남기기</button>
+    <div class="success-msg" id="success-msg">
+      <p>"오늘 당신이 빛난 순간입니다."</p>
+      <span>의견이 기록되었습니다</span>
+    </div>
+  </div>
+
+  <div class="resp-section">
+    <div class="sec-label">다른 사람들의 생각</div>
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-num" id="stat-total">0</span><span class="stat-label">총 응답</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-yes">—</span><span class="stat-label">말이 된다</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-no">—</span><span class="stat-label">말이 안 된다</span></div>
+    </div>
+    <div class="bar-section" id="bar-section" style="display:none;">
+      <div class="bar-row">
+        <span class="bar-label">YES</span>
+        <div class="bar-track"><div class="bar-fill" id="bar-yes" style="width:0%"></div></div>
+        <span class="bar-pct" id="pct-yes">0%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">NO</span>
+        <div class="bar-track"><div class="bar-fill-no" id="bar-no" style="width:0%"></div></div>
+        <span class="bar-pct-no" id="pct-no">0%</span>
+      </div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter('all',this)">전체</button>
+      <button class="filter-btn" onclick="setFilter('yes',this)">말이 된다</button>
+      <button class="filter-btn" onclick="setFilter('no',this)">말이 안 된다</button>
+    </div>
+    <div id="responses-list">
+      <div class="loading-state">불러오는 중...</div>
+    </div>
+  </div>
+
+  <div class="halo-footer">HALO · NAKA Healthcare Enterprise · 26-1 Speculative Design · 2026</div>
+
+  <script>
+    let currentVote = null;
+    let currentFilter = 'all';
+    let allResponses = [];
+
+    function selectVote(v) {
+      currentVote = v;
+      document.getElementById('vote-yes').classList.toggle('selected', v === 'yes');
+      document.getElementById('vote-no').classList.toggle('selected', v === 'no');
+    }
+
+    function updateChar(el) {
+      document.getElementById('char-num').textContent = el.value.length;
+    }
+
+    function formatTime(ts) {
+      const d = new Date(ts);
+      return d.getFullYear() + '.' +
+        String(d.getMonth()+1).padStart(2,'0') + '.' +
+        String(d.getDate()).padStart(2,'0') + ' ' +
+        String(d.getHours()).padStart(2,'0') + ':' +
+        String(d.getMinutes()).padStart(2,'0');
+    }
+
+    async function submitResponse() {
+      const thought = document.getElementById('thought-input').value.trim();
+      const name = document.getElementById('name-input').value.trim() || '익명';
+
+      if (!currentVote) { alert('먼저 YES 또는 NO를 선택해주세요.'); return; }
+      if (!thought) { alert('생각을 조금 적어주세요.'); return; }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = '저장 중...';
+
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          body: JSON.stringify({ vote: currentVote, thought, name }),
+        });
+
+        document.getElementById('thought-input').value = '';
+        document.getElementById('name-input').value = '';
+        document.getElementById('char-num').textContent = '0';
+        currentVote = null;
+        document.getElementById('vote-yes').classList.remove('selected');
+        document.getElementById('vote-no').classList.remove('selected');
+
+        const msg = document.getElementById('success-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+
+        btn.disabled = false;
+        btn.textContent = '의견 남기기';
+        loadResponses();
+
+      } catch(e) {
+        btn.disabled = false;
+        btn.textContent = '의견 남기기';
+        alert('저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    }
+
+    function setFilter(f, el) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderResponses();
+    }
+
+    function renderResponses() {
+      const filtered = currentFilter === 'all'
+        ? allResponses
+        : allResponses.filter(i => i.vote === currentFilter);
+
+      const list = document.getElementById('responses-list');
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state">아직 의견이 없습니다.<br>첫 번째로 남겨주세요.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(item => `
+        <div class="resp-card">
+          <div class="resp-header">
+            <span class="resp-vote ${item.vote}">${item.vote === 'yes' ? 'YES — 말이 된다' : 'NO — 말이 안 된다'}</span>
+            <span class="resp-time">${formatTime(item.ts)}</span>
+          </div>
+          <p class="resp-text">${String(item.thought).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+          <span class="resp-name">— ${String(item.name).replace(/</g,'&lt;')}</span>
+        </div>
+      `).join('');
+    }
+
+    async function loadResponses() {
+      try {
+        const res = await fetch(SHEET_URL + '?action=get');
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          allResponses = json.data;
+
+          const total = allResponses.length;
+          const yesCount = allResponses.filter(i => i.vote === 'yes').length;
+          const noCount = allResponses.filter(i => i.vote === 'no').length;
+
+          document.getElementById('stat-total').textContent = total;
+          document.getElementById('stat-yes').textContent = total > 0 ? yesCount : '—';
+          document.getElementById('stat-no').textContent = total > 0 ? noCount : '—';
+
+          if (total > 0) {
+            const yp = Math.round(yesCount / total * 100);
+            const np = Math.round(noCount / total * 100);
+            document.getElementById('bar-section').style.display = 'block';
+            document.getElementById('bar-yes').style.width = yp + '%';
+            document.getElementById('bar-no').style.width = np + '%';
+            document.getElementById('pct-yes').textContent = yp + '%';
+            document.getElementById('pct-no').textContent = np + '%';
+          }
+
+          renderResponses();
+        }
+      } catch(e) {
+        document.getElementById('responses-list').innerHTML =
+          '<div class="empty-state">데이터를 불러올 수 없습니다.</div>';
+      }
+    }
+
+    // 페이지 로드 시 + 30초마다 자동 갱신
+    loadResponses();
+    setInterval(loadResponses, 30000);
+  </script>
+
+</body>
+</html>
