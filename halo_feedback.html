@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HALO — 당신만 몰랐을 뿐</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; color:#E8E4DC; font-family:'DM Mono',monospace; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:56px 24px 60px; }
+  .logo-wrap { margin-bottom:28px; }
+  .logo-wrap svg { width:120px; height:120px; }
+  .headline { font-family:'Libre Baskerville',serif; font-size:22px; font-weight:400; text-align:center; line-height:1.6; margin-bottom:8px; }
+  .headline em { font-style:italic; color:#B8933A; }
+  .sub { font-size:10px; color:#3A3530; letter-spacing:0.15em; text-align:center; margin-bottom:48px; }
+  .form-wrap { width:100%; max-width:480px; display:flex; flex-direction:column; }
+  .form-wrap.hide { display:none; }
+  .sec-label { font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:#B8933A; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .sec-label::after { content:''; flex:1; height:1px; background:#1A1610; }
+  .q-main { font-family:'Libre Baskerville',serif; font-size:19px; font-weight:400; line-height:1.6; margin-bottom:20px; }
+  .vote-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:28px; }
+  .vote-btn { padding:16px; border:1px solid #252015; background:#000; color:#E8E4DC; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.08em; cursor:pointer; transition:all 0.18s; text-align:center; }
+  .vote-btn:hover { border-color:#B8933A; color:#B8933A; }
+  .vote-btn.selected { border-color:#B8933A; background:rgba(184,147,58,0.07); color:#B8933A; }
+  .q-sub { font-size:11px; color:#5A5550; margin-bottom:10px; }
+  textarea { width:100%; background:#080808; border:1px solid #252015; color:#E8E4DC; font-family:'DM Mono',monospace; font-size:13px; line-height:1.7; padding:14px; resize:none; outline:none; transition:border-color 0.18s; margin-bottom:4px; }
+  textarea:focus { border-color:#B8933A; }
+  textarea::placeholder { color:#2A2520; }
+  .char-count { font-size:10px; color:#2A2520; text-align:right; margin-bottom:20px; }
+  input[type="text"] { width:100%; background:#080808; border:1px solid #252015; color:#E8E4DC; font-family:'DM Mono',monospace; font-size:13px; padding:12px 14px; outline:none; transition:border-color 0.18s; margin-bottom:24px; }
+  input[type="text"]:focus { border-color:#B8933A; }
+  input[type="text"]::placeholder { color:#2A2520; }
+  .submit-btn { width:100%; padding:16px; background:transparent; border:1px solid #B8933A; color:#B8933A; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; cursor:pointer; transition:all 0.18s; }
+  .submit-btn:hover { background:rgba(184,147,58,0.09); }
+  .submit-btn:disabled { opacity:0.4; cursor:default; }
+  .done-screen { display:none; flex-direction:column; align-items:center; text-align:center; width:100%; max-width:480px; }
+  .done-screen.show { display:flex; }
+  .done-ring { width:80px; height:80px; border-radius:50%; border:1px solid #B8933A; display:flex; align-items:center; justify-content:center; margin-bottom:28px; box-shadow:0 0 24px rgba(184,147,58,0.12); }
+  .done-ring span { font-size:24px; color:#B8933A; }
+  .done-main { font-family:'Libre Baskerville',serif; font-size:20px; font-weight:400; line-height:1.6; margin-bottom:12px; }
+  .done-main em { font-style:italic; color:#B8933A; }
+  .done-sub { font-size:11px; color:#4A4540; line-height:1.8; }
+  .footer { margin-top:60px; font-size:10px; color:#1A1610; letter-spacing:0.12em; text-align:center; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<div class="logo-wrap">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 204.24 204.24">
+    <defs>
+      <linearGradient id="lg" x1="2034.39" y1="-1898.52" x2="2166.44" y2="-1898.52" gradientTransform="translate(-1796.4079 -1998.3359) rotate(90)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#968052"/><stop offset=".44" stop-color="#fff"/>
+        <stop offset=".76" stop-color="#af8437"/><stop offset="1" stop-color="#544a34"/>
+      </linearGradient>
+    </defs>
+    <circle fill="#231f20" cx="102.11" cy="102.08" r="65.03"/>
+    <path fill="url(#lg)" d="M102.12,168.11c-36.41,0-66.03-29.62-66.03-66.03s29.62-66.02,66.03-66.02,66.03,29.62,66.03,66.02-29.62,66.03-66.03,66.03ZM102.12,38.06c-35.3,0-64.03,28.72-64.03,64.02s28.72,64.03,64.03,64.03,64.03-28.72,64.03-64.03-28.72-64.02-64.03-64.02Z"/>
+    <path fill="#fff" d="M54.29,100.84h20.17v-7.32h.47v16.06h-.47v-8.34h-20.17v8.34h-.47v-16.06h.47v7.32Z"/>
+    <path fill="#fff" d="M94.53,93.68l9.12,15.91h-.51l-3.17-5.53h-17.04l-3.17,5.53h-.51l9.12-15.91c1.09-.11,1.99-.16,3.08-.16s1.99.04,3.08.16ZM88.69,94.04l-5.51,9.62h16.55l-5.49-9.62c-.98-.07-1.81-.11-2.79-.11s-1.81.04-2.77.11Z"/>
+    <path fill="#fff" d="M108.49,93.53v3.44c0,3.97.11,8.21.4,12.11,2.72.22,5.6.38,8.32.38s5.6-.16,8.3-.38c.27-1.05.36-2.01.42-3.06h.49c-.09,1.18-.22,2.25-.49,3.41-2.9.29-5.82.4-8.72.4s-5.82-.11-8.72-.4c-.31-4.06-.49-8.39-.49-12.47v-3.44h.49Z"/>
+    <ellipse fill="#bdab9d" cx="141.13" cy="101.56" rx="12.82" ry="8.4"/>
+    <ellipse fill="none" stroke="#bdab9d" stroke-width="0.75" cx="141.13" cy="101.56" rx="12.07" ry="7.65"/>
+  </svg>
+</div>
+
+<h1 class="headline">당신은 오늘 충분히 빛났습니다.<br><em>당신만 몰랐을 뿐.</em></h1>
+<p class="sub">26-1 Speculative Design Exhibition · 2026</p>
+
+<div class="form-wrap" id="form-wrap">
+  <div class="sec-label">당신의 생각을 남겨주세요</div>
+  <p class="q-main">이 세계관, 말이 된다고 생각하시나요?</p>
+  <div class="vote-row">
+    <button class="vote-btn" id="vote-yes" onclick="selectVote('yes')">YES — 충분히 가능하다</button>
+    <button class="vote-btn" id="vote-no" onclick="selectVote('no')">NO — 말이 안 된다</button>
+  </div>
+  <p class="q-sub">어떤 생각이 드셨나요?</p>
+  <textarea id="thought-input" rows="4" placeholder="자유롭게 적어주세요 — 불편했던 점, 공감됐던 점, 떠오른 질문 무엇이든." maxlength="400" oninput="document.getElementById('char-num').textContent=this.value.length"></textarea>
+  <div class="char-count"><span id="char-num">0</span> / 400</div>
+  <p class="q-sub">이름 또는 익명 (선택)</p>
+  <input type="text" id="name-input" placeholder="익명으로 남기셔도 됩니다" maxlength="30"/>
+  <button class="submit-btn" id="submit-btn" onclick="submitResponse()">의견 남기기</button>
+</div>
+
+<div class="done-screen" id="done-screen">
+  <div class="done-ring"><span>✦</span></div>
+  <div class="done-main">"오늘 당신이<br><em>빛난 순간입니다.</em>"</div>
+  <p class="done-sub">의견이 기록되었습니다.<br>감사합니다.</p>
+</div>
+
+<div class="footer">HALO · NAKA Healthcare Enterprise · 26-1 Speculative Design · 2026</div>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzp42C9ZAiaBA_GZi08PSdPAy7ZJAW1U9TCZWwS2TYpQOYzSd5xci64gGT8MQF0FKrs/exec';
+let currentVote = null;
+let submitted = false;
+
+function selectVote(v) {
+  currentVote = v;
+  document.getElementById('vote-yes').classList.toggle('selected', v==='yes');
+  document.getElementById('vote-no').classList.toggle('selected', v==='no');
+}
+
+function submitResponse() {
+  if (submitted) return;
+  const thought = document.getElementById('thought-input').value.trim();
+  const name = document.getElementById('name-input').value.trim() || '익명';
+  if (!currentVote) { alert('먼저 YES 또는 NO를 선택해주세요.'); return; }
+  if (!thought) { alert('생각을 조금 적어주세요.'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+
+  const url = SHEET_URL
+    + '?action=post'
+    + '&vote=' + encodeURIComponent(currentVote)
+    + '&thought=' + encodeURIComponent(thought)
+    + '&name=' + encodeURIComponent(name);
+
+  // Image ping 방식 — 모든 브라우저/핸드폰 호환
+  const img = new Image();
+  img.onload = img.onerror = function() {
+    if (!submitted) { submitted = true; showDone(); }
+  };
+  img.src = url;
+
+  // 4초 후 무조건 완료 처리
+  setTimeout(function() {
+    if (!submitted) { submitted = true; showDone(); }
+  }, 4000);
+}
+
+function showDone() {
+  document.getElementById('form-wrap').classList.add('hide');
+  document.getElementById('done-screen').classList.add('show');
+}
+</script>
+</body>
+</html>
